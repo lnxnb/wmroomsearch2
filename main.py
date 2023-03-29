@@ -8,14 +8,14 @@ import re
 table = pd.DataFrame()
 
 #Import HTML file
-with open('html.html', 'r') as f:
+with open('htmlfiles/13.html', 'r') as f:
 
     contents = f.read()
 
     soup = bs(contents, 'html.parser')
 
 #Get outermost tag containing class information 
-first = soup.findAll('div',{"class":'ui-widget ui-layout-center overflow-table ui-layout-pane ui-layout-pane-center'})
+first = soup.findAll('tr')
 #Get list of titles
 for child in first:
     emptyset = []
@@ -93,13 +93,14 @@ for child in first:
         emptydayset += [re.findall("Monday|Tuesday|Wednesday|Thursday|Friday",child['title'])]
         spans = child.findAll('span')
         for child in spans:
+            print(child)
             if re.search("PM|AM",child.text):
                 if re.search("[0-9]",child.text):
                     emptytimeset.append(child.text)
             elif re.search("-",child.text):
                 emptytimeset.append("")
-    table['Meeting Days'] = emptydayset
-    table['Meeting Times'] = emptytimeset
+    #table['Meeting Days'] = emptydayset
+    #table['Meeting Times'] = emptytimeset
 
 #Get list of buildings and room numbers
 for child in first:
@@ -115,8 +116,8 @@ for child in first:
             if re.search("Room" ,child.text):
                 if child.text != "Room: ":
                     emptyroomset.append(child.text[6:])
-    table['Hall'] = emptyhallset
-    table['Room Number'] = emptyroomset
+    #table['Hall'] = emptyhallset
+    #table['Room Number'] = emptyroomset
 
 
 #Get list of campuses
@@ -165,7 +166,7 @@ for child in first:
         emptyset.append(attributes)
     table['Attributes'] = emptyset
 
-print(table)
+#print(table)
 
 
 #with open('test.txt', 'w') as f:
